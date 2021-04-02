@@ -1,0 +1,29 @@
+@{
+    ViewBag.Title = "Hello";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=auto, initial-scale=1.0">
+    <title>Hello</title>
+</head> 
+<body>
+    <h1>
+        @ViewBag.Title Universe!
+    </h1>
+    <p>This is from _Layout.cshtml</p>
+
+    <menu>
+        <ul>
+            <li><a asp-controller="App" asp-action="Index">Index</a></li>
+            <li><a asp-controller="App" asp-action="Earth">Earth</a></li>
+            <li><a asp-controller="App" asp-action="Mars">Mars</a></li>
+        </ul>
+    </menu>
+
+    @RenderBody()
+</body>
+</html>
