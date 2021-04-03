@@ -21,6 +21,14 @@ namespace Hello.Controllers
         [HttpPost("Earth")]
         public IActionResult Earth(ContactViewModel model)
         {
+            if(ModelState.IsValid)
+            {
+                // Save Request
+            }
+            else
+            {
+                // Throw Error
+            }
             return View();
         }
 
