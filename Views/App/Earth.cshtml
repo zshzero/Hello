@@ -1,1 +1,29 @@
+@model ContactViewModel
+@{
+    ViewBag.Title = "Earth";
+}
+
 <h2>Hi from Earth</h2>
+
+<h3>@ViewBag.Title - Contact Us</h3>
+
+<form method="POST">
+    <br>
+    <label asp-for="FirstName">First Name</label>
+    <input asp-for="FirstName" placeholder="Your name..">
+    <br>
+
+    <br>
+    <label asp-for="LastName">Last Name</label>
+    <input type="email" asp-for="LastName" placeholder="Your last name..">
+    <br>
+
+    <br>
+    <label asp-for="Reason">Reason</label>
+    <textarea asp-for="Reason" placeholder="Write something.." rows="4"></textarea>
+    <br>
+
+    <br>
+    <input type="submit" value="Submit">
+
+  </form>

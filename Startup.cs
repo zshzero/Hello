@@ -17,6 +17,8 @@ namespace Hello
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews(); // Required Services for the app
+            services.AddRazorPages() // Includes razor pages
+                .AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -25,6 +27,10 @@ namespace Hello
             if(env.IsDevelopment()) { // Checks for value of ASPNETCORE_ENVIRONMENT in launch.json
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/error"); // Friendly error page
+            }
             
             app.UseStaticFiles(); // It serves only files present in wwwroot(which is like root of the web server)
 
@@ -32,6 +38,8 @@ namespace Hello
             
             app.UseEndpoints( cfg => 
             { // Specifies set of middleware that tries to satisfy request from server
+                cfg.MapRazorPages();
+                
                 cfg.MapControllerRoute("Default",
                 "/{controller}/{action}/{id?}",     // Pattern to much for controllers and view(action)
                 new { controller = "App", action="Index"});
