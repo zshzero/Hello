@@ -1,0 +1,5 @@
+{
+    "ConnectionStrings":{
+        "HelloContextDB": "Server=localhost;Port=5432;Database=hello;User Id=postgres;Password=postgres;"
+    }
+}
