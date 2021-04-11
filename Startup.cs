@@ -21,6 +21,7 @@ namespace Hello
             services.AddTransient<HelloSeeder>();
             services.AddDbContext<HelloContext>();
             services.AddTransient<ILogService, LogService>();
+            services.AddScoped<IHelloRepository,HelloRepository>();
 
             services.AddControllersWithViews(); // Required Services for the app
             services.AddRazorPages() // Includes razor pages

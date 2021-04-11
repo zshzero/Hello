@@ -10,12 +10,12 @@ namespace Hello.Controllers
     public class AppController : Controller
     {
         private readonly ILogService logservice;
-        private readonly HelloContext context;
+        private readonly IHelloRepository repository;
 
-        public AppController(ILogService logService, HelloContext context)
+        public AppController(ILogService logService, IHelloRepository repository)
         {
             this.logservice = logService;
-            this.context = context;
+            this.repository = repository;
         }
 
         public IActionResult Index()
@@ -55,11 +55,9 @@ namespace Hello.Controllers
         public IActionResult Shop()
         {
             // var results = context.Products.OrderBy(p => p.Category).ToList(); // fluent syntax
-            var results = from p in context.Products
-                            orderby p.Category
-                            select p;   // query syntax
+            var results = repository.GetAllProducts();
             
-            return View(results.ToList());
+            return View(results);
         }
     }
 }

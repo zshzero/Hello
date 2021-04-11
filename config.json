@@ -1,5 +1,11 @@
 {
-    "ConnectionStrings":{
-        "HelloContextDB": "Server=localhost;Port=5432;Database=hello;User Id=postgres;Password=postgres;"
+  "ConnectionStrings": {
+    "HelloContextDB": "Server=localhost;Port=5432;Database=hello;User Id=postgres;Password=postgres;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
     }
+  }
 }
