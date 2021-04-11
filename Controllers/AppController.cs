@@ -2,15 +2,20 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using Hello.ViewModel;
 using Hello.Services;
+using Hello.Data;
+using System.Linq;
 
 namespace Hello.Controllers
 {
     public class AppController : Controller
     {
-        private readonly ILogService _logservice;
-        public AppController(ILogService logService)
+        private readonly ILogService logservice;
+        private readonly HelloContext context;
+
+        public AppController(ILogService logService, HelloContext context)
         {
-            _logservice = logService;
+            this.logservice = logService;
+            this.context = context;
         }
 
         public IActionResult Index()
@@ -31,7 +36,7 @@ namespace Hello.Controllers
             if(ModelState.IsValid)
             {
                 // Save Request
-                _logservice.SaveRequest(model.FirstName,model.LastName,model.Reason);
+                logservice.SaveRequest(model.FirstName,model.LastName,model.Reason);
                 ViewBag.UserMessage = "Request Saved";
                 ModelState.Clear();
             }
@@ -45,6 +50,16 @@ namespace Hello.Controllers
         public IActionResult Mars()
         {
             return View();
+        }
+        
+        public IActionResult Shop()
+        {
+            // var results = context.Products.OrderBy(p => p.Category).ToList(); // fluent syntax
+            var results = from p in context.Products
+                            orderby p.Category
+                            select p;   // query syntax
+            
+            return View(results.ToList());
         }
     }
 }

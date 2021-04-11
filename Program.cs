@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Hello.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -14,7 +16,24 @@ namespace Hello
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            if(args.Length == 1 && args[0].ToLower() == "seed")
+            {
+                RunSeeding(host);
+                Console.WriteLine("Seeding Done");
+            }
+            else
+                host.Run();
+        }
+
+        private static void RunSeeding(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var seeder = scope.ServiceProvider.GetService<HelloSeeder>();
+                seeder.seed();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
