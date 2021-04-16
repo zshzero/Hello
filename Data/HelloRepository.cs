@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hello.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Hello.Data
@@ -17,6 +18,13 @@ namespace Hello.Data
             this.logger = logger;
         }
 
+        public IEnumerable<Order> GetAllOrders()
+        {
+            return ctx.Orders.Include( o => o.Items)
+                             .ThenInclude( i => i.Product)
+                             .ToList();
+        }
+
         public IEnumerable<Product> GetAllProducts()
         {
             try
@@ -31,6 +39,14 @@ namespace Hello.Data
                 return null;
             }
             
+        }
+
+        public Order GetOrderById(int id)
+        {
+            return ctx.Orders.Include( o => o.Items)
+                             .ThenInclude( i => i.Product)
+                             .Where( w => w.Id.Equals(id))
+                             .FirstOrDefault();
         }
 
         public IEnumerable<Product> GetProductsByCategory(string Category)

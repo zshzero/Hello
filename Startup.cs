@@ -25,7 +25,8 @@ namespace Hello
 
             services.AddControllersWithViews(); // Required Services for the app
             services.AddRazorPages() // Includes razor pages
-                .AddRazorRuntimeCompilation();
+                    .AddRazorRuntimeCompilation()
+                    .AddNewtonsoftJson( cfg => cfg.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
