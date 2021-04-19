@@ -1,4 +1,7 @@
+using System;
 using Hello.Data;
+using Hello.Data.Entities;
+using Hello.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -45,6 +48,51 @@ namespace Hello.Controllers
                 logger.LogError($"Failed to get Orders: {ex}");
                 return BadRequest("Failed to get Orders");
             }
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody]OrderViewModel model)
+        {
+            try
+            {
+                if(ModelState.IsValid)
+                {
+                    var newOrder = new Order()
+                    {
+                        OrderDate = model.OrderDate,
+                        OrderNumber = model.OrderNumber,
+                        Id = model.OrderId
+                    };
+
+                    if(newOrder.OrderDate == DateTime.MinValue)
+                    {
+                        newOrder.OrderDate = DateTime.Now;
+                    }
+
+                    repository.AddEntity(newOrder);
+                    if(repository.SaveAll())
+                    {
+                        var vm = new OrderViewModel()
+                        {
+                            OrderId = newOrder.Id,
+                            OrderDate = newOrder.OrderDate,
+                            OrderNumber = newOrder.OrderNumber
+                        };
+                        
+                        return Created($"/api/orders/{vm.OrderId}",vm);
+                    }
+                }
+                else
+                {
+                    return BadRequest(ModelState);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                logger.LogError($"Failed to add order : {ex}");
+            }
+
+            return BadRequest("Failed to add order");
         }
     }
 }
