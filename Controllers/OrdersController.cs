@@ -26,11 +26,11 @@ namespace Hello.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(bool includeItems = true)
         {
             try
             {
-                var result = repository.GetAllOrders();
+                var result = repository.GetAllOrders(includeItems);
                 return Ok(mapper.Map<IEnumerable<OrderViewModel>>(result)); // Source is infered as param type 
             }
             catch (System.Exception ex)
