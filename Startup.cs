@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Hello.Services;
 using Hello.Data;
+using System.Reflection;
 
 namespace Hello
 {
@@ -18,6 +19,7 @@ namespace Hello
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<HelloSeeder>();
             services.AddDbContext<HelloContext>();
             services.AddTransient<ILogService, LogService>();

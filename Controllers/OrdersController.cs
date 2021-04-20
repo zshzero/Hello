@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using AutoMapper;
 using Hello.Data;
 using Hello.Data.Entities;
 using Hello.ViewModel;
@@ -12,11 +14,15 @@ namespace Hello.Controllers
     {
         private readonly IHelloRepository repository;
         private readonly ILogger logger;
+        private readonly IMapper mapper;
 
-        public OrdersController(IHelloRepository repository, ILogger<OrdersController> logger)
+        public OrdersController(IHelloRepository repository,
+                                ILogger<OrdersController> logger,
+                                IMapper mapper)
         {
             this.repository = repository;
             this.logger = logger;
+            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -24,7 +30,8 @@ namespace Hello.Controllers
         {
             try
             {
-                return Ok(repository.GetAllOrders());
+                var result = repository.GetAllOrders();
+                return Ok(mapper.Map<IEnumerable<OrderViewModel>>(result)); // Source is infered as param type 
             }
             catch (System.Exception ex)
             {
@@ -40,7 +47,7 @@ namespace Hello.Controllers
             {
                 var order = repository.GetOrderById(id);
 
-                if (order != null) return Ok(order);
+                if (order != null) return Ok(mapper.Map<Order, OrderViewModel>(order));
                 else return NotFound();
             }
             catch (System.Exception ex)
@@ -57,12 +64,7 @@ namespace Hello.Controllers
             {
                 if(ModelState.IsValid)
                 {
-                    var newOrder = new Order()
-                    {
-                        OrderDate = model.OrderDate,
-                        OrderNumber = model.OrderNumber,
-                        Id = model.OrderId
-                    };
+                    var newOrder = mapper.Map<Order>(model);
 
                     if(newOrder.OrderDate == DateTime.MinValue)
                     {
@@ -71,15 +73,8 @@ namespace Hello.Controllers
 
                     repository.AddEntity(newOrder);
                     if(repository.SaveAll())
-                    {
-                        var vm = new OrderViewModel()
-                        {
-                            OrderId = newOrder.Id,
-                            OrderDate = newOrder.OrderDate,
-                            OrderNumber = newOrder.OrderNumber
-                        };
-                        
-                        return Created($"/api/orders/{vm.OrderId}",vm);
+                    {   
+                        return Created($"/api/orders/{newOrder.Id}",mapper.Map<OrderViewModel>(newOrder));
                     }
                 }
                 else

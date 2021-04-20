@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Hello.ViewModel
@@ -10,5 +11,6 @@ namespace Hello.ViewModel
         [Required]
         [MinLength(5)]
         public string OrderNumber { get; set; }
+        public ICollection<OrderItemViewModel> Items { get; set; }
     }
 }
