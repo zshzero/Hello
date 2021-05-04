@@ -32,7 +32,7 @@ namespace Hello
             using (var scope = host.Services.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetService<HelloSeeder>();
-                seeder.seed();
+                seeder.seedAsync().Wait();
             }
         }
 

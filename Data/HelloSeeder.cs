@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Hello.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 
 namespace Hello.Data
 {
@@ -12,16 +14,36 @@ namespace Hello.Data
     {
         private readonly HelloContext ctx;
         private readonly IWebHostEnvironment env;
+        private readonly UserManager<StoreUser> userManager;
 
-        public HelloSeeder(HelloContext ctx, IWebHostEnvironment env)
+        public HelloSeeder(HelloContext ctx, IWebHostEnvironment env, UserManager<StoreUser> userManager)
         {
             this.ctx = ctx;
             this.env = env;
+            this.userManager = userManager;
         }
 
-        public void seed()
+        public async Task seedAsync()
         {
             ctx.Database.EnsureCreated(); // creates only if it doesn't exists
+
+            StoreUser user = await userManager.FindByEmailAsync("zshzero@hello.com");
+
+            if(user == null)
+            {
+                user = new StoreUser()
+                {
+                    Email = "zshzero@hello.com",
+                    UserName = "zshzero"
+                };
+
+                var result = await userManager.CreateAsync(user,"P@ssw0rd!");
+
+                if (result != IdentityResult.Success)
+                {
+                    throw new InvalidOperationException("Couldn't create new user in seeder");
+                }
+            }
 
             if (!ctx.Products.Any()) // There aren't any product
             {

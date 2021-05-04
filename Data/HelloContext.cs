@@ -1,10 +1,11 @@
 using Hello.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Hello.Data
 {
-    public class HelloContext : DbContext
+    public class HelloContext : IdentityDbContext<StoreUser>
     {
         private readonly IConfiguration _config;
 

@@ -10,6 +10,8 @@ using Microsoft.Extensions.Hosting;
 using Hello.Services;
 using Hello.Data;
 using System.Reflection;
+using Hello.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Hello
 {
@@ -19,6 +21,11 @@ namespace Hello
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<StoreUser, IdentityRole>(cfg =>
+            {
+                cfg.User.RequireUniqueEmail = true;                
+            })
+            .AddEntityFrameworkStores<HelloContext>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<HelloSeeder>();
             services.AddDbContext<HelloContext>();
@@ -45,6 +52,9 @@ namespace Hello
             app.UseStaticFiles(); // It serves only files present in wwwroot(which is like root of the web server)
 
             app.UseRouting(); // Allows us to route individual calls that come into server
+
+            app.UseAuthentication();
+            app.UseAuthorization();
             
             app.UseEndpoints( cfg => 
             { // Specifies set of middleware that tries to satisfy request from server

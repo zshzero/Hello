@@ -4,6 +4,7 @@ using Hello.ViewModel;
 using Hello.Services;
 using Hello.Data;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Hello.Controllers
 {
@@ -52,6 +53,7 @@ namespace Hello.Controllers
             return View();
         }
         
+        [Authorize]
         public IActionResult Shop()
         {
             // var results = context.Products.OrderBy(p => p.Category).ToList(); // fluent syntax
