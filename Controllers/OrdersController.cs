@@ -4,12 +4,15 @@ using AutoMapper;
 using Hello.Data;
 using Hello.Data.Entities;
 using Hello.ViewModel;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace Hello.Controllers
 {
     [Route("api/[Controller]")]
+    [Authorize(AuthenticationSchemes=JwtBearerDefaults.AuthenticationScheme)]
     public class OrdersController : ControllerBase
     {
         private readonly IHelloRepository repository;

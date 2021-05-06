@@ -12,20 +12,40 @@ using Hello.Data;
 using System.Reflection;
 using Hello.Data.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Configuration;
+using System.Text;
 
 namespace Hello
 {
     public class Startup
     {
+        private readonly IConfiguration configuration;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        public Startup(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentity<StoreUser, IdentityRole>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;                
             })
-            .AddEntityFrameworkStores<HelloContext>();
+                    .AddEntityFrameworkStores<HelloContext>();
+            services.AddAuthentication()
+                    .AddCookie()
+                    .AddJwtBearer( cfg => 
+                    {
+                        cfg.TokenValidationParameters = new TokenValidationParameters()
+                        {
+                            ValidIssuer = configuration["Token:Issuer"],
+                            ValidAudience = configuration["Token:Audience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:Key"]))
+                        };
+                    });
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddTransient<HelloSeeder>();
             services.AddDbContext<HelloContext>();
