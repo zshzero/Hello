@@ -37,6 +37,21 @@ namespace Hello.Data
             }
         }
 
+        public IEnumerable<Order> GetAllOrdersByUser(string username, bool includeItems)
+        {
+             if (includeItems)
+            {
+                return ctx.Orders.Where(o => o.User.UserName == username)
+                                .Include( o => o.Items)
+                                .ThenInclude( i => i.Product)
+                                .ToList();                
+            }
+            else 
+            {
+                return ctx.Orders.ToList();
+            }
+        }
+
         public IEnumerable<Product> GetAllProducts()
         {
             try

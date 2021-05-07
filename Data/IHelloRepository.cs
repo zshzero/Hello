@@ -12,5 +12,6 @@ namespace Hello.Data
         IEnumerable<Order> GetAllOrders(bool includeItems);
         Order GetOrderById(int id);
         void AddEntity(object model);
+        IEnumerable<Order> GetAllOrdersByUser(string username, bool includeItems);
     }
 }
