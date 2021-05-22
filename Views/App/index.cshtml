@@ -1,8 +1,20 @@
-@{
+@* @{
     ViewBag.Title = "Hello";
 }
 
 <h2>
      @ViewBag.Title Universe Again!
 </h2>
-<p>This is from Index Page</P>
+<p>This is from Index Page</P> *@
+
+@section Scripts {
+    <script src="~/client/runtime.7d2e27576b419591df3b.js"></script>
+    <script src="~/client/polyfills.c3f55fda6ad26d94104a.js"></script>
+    <script src="~/client/main.8b656e9841595bca228a.js" asp-append-version="true"></script>
+}
+
+@section head {
+    <link rel="stylesheet" href="~/client/styles.31d6cfe0d16ae931b73c.css">
+}
+
+<app-root> </app-root>

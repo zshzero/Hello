@@ -21,7 +21,7 @@ namespace Hello.Controllers
 
         public IActionResult Index()
         {
-            throw new InvalidProgramException("Bad Things happen for one's good"); // Purposely created error
+            // throw new InvalidProgramException("Bad Things happen for one's good"); // Purposely created error
             return View();
         }
 
