@@ -5,9 +5,8 @@
 
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
-    <h3>Featured</h3>
 	<table id="cart" class="table table-hover table-condensed">
-    				<thead>
+    				<!-- <thead>
 						<tr>
 							<th style="width:50%">Product</th>
 							<th style="width:10%">Price</th>
@@ -15,7 +14,16 @@
 							<th style="width:22%" class="text-center">Subtotal</th>
 							<th style="width:10%"></th>
 						</tr>
-					</thead>
-                    <product-list></product-list>
-		</table>
+					</thead> -->
+	</table>
+	<div class="row">
+		<div class="col-9">
+			<h3>Featured</h3>
+			<product-list></product-list>
+		</div>
+
+		<div class="col-3">
+			<cart></cart>
+		</div>
+	</div>
 </div>
