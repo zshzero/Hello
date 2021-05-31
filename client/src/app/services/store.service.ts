@@ -27,16 +27,25 @@ export class store {
     }
 
     addToOrder(product: Product) {
-        const newItem = new OrderItem();
-        newItem.quantity = 1;
-        newItem.unitPrice = product.price;
-        newItem.productId = product.id;
-        newItem.productCategory = product.category;
-        newItem.productSize = product.size;
-        newItem.productTitle = product.title;
-        newItem.productArtist = product.artist;
-        newItem.productArtid = product.artId;
 
-        this.order.items.push(newItem);
+        let item: OrderItem | undefined;
+
+        item = this.order.items.find( o => o.productId === product.id);
+
+        if(item)
+            item.quantity++;
+        else {
+            item = new OrderItem();
+            item.quantity = 1;
+            item.unitPrice = product.price;
+            item.productId = product.id;
+            item.productCategory = product.category;
+            item.productSize = product.size;
+            item.productTitle = product.title;
+            item.productArtist = product.artist;
+            item.productArtid = product.artId;
+            
+            this.order.items.push(item);
+        }
     }
 }
