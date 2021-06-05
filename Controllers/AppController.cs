@@ -53,7 +53,6 @@ namespace Hello.Controllers
             return View();
         }
         
-        [Authorize]
         public IActionResult Shop()
         {
             // var results = context.Products.OrderBy(p => p.Category).ToList(); // fluent syntax
