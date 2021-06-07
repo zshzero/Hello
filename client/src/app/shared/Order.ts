@@ -13,7 +13,7 @@ export class OrderItem {
 export class Order {
     orderId!: number;
     orderDate: Date = new Date();
-    orderNumber!: String;
+    orderNumber: String = (Math.floor(Math.random() * 90000) + 10000).toString();
     items: OrderItem[] = [];
 
     get subTotal(): number {
