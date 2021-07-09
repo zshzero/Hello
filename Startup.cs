@@ -57,8 +57,9 @@ namespace NorthwindApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    "Default",
-                    "/{controller=App}/{action=Index}/{id?}"
+                    //https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/routing?view=aspnetcore-5.0#conventional-routing
+                    name: "Default",
+                    pattern: "/{controller=App}/{action=Index}/{id?}"
                 );
             });
         }
