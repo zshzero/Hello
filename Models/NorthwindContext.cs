@@ -15,6 +15,7 @@ namespace Northwind.Models
         }
 
         public DbSet<Employee> employees { get; set; }
+        public DbSet<Order> orders { get; set; }
 
          protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

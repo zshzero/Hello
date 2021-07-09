@@ -18,8 +18,8 @@ namespace NorthwindApi.Controllers
             this.repository = repository;
         }
 
-         [HttpGet]
-        public ActionResult<IEnumerable<Employee>> Get()
+        [HttpGet]
+        public ActionResult<IEnumerable<Employee>> GetAllEmployees()
         {
              try
             {
@@ -29,6 +29,36 @@ namespace NorthwindApi.Controllers
             {
                 logger.LogError($"Failed: {ex}");
                 return BadRequest("Failed to get Employees");
+            }
+            
+        }
+
+        [HttpGet("{EmployeeId:int}")] 
+        public ActionResult<IEnumerable<Employee>> GetEmployeeById(int EmployeeId)
+        {
+             try
+            {
+                return Ok(repository.GetEmployeeById(EmployeeId));
+            }
+            catch (System.Exception ex)
+            {
+                logger.LogError($"Failed: {ex}");
+                return BadRequest($"Failed to get Employee");
+            }
+            
+        }
+
+        [HttpGet("{EmployeeId:int}/order/{OrderId:int}")] 
+        public ActionResult<IEnumerable<Order>> GetOrdersByEmployeeId(int EmployeeId, int OrderId)
+        {
+             try
+            {
+                return Ok(repository.GetOrdersByEmployeeId(EmployeeId, OrderId));
+            }
+            catch (System.Exception ex)
+            {
+                logger.LogError($"Failed: {ex}");
+                return BadRequest($"Failed to get Order by Employee");
             }
             
         }
