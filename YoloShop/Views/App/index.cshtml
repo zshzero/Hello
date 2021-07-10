@@ -1,0 +1,21 @@
+@* @{
+    ViewBag.Title = "YoloShop";
+}
+
+<h2>
+     @ViewBag.Title Universe Again!
+</h2>
+<p>This is from Index Page</P> *@
+
+@section Scripts {
+    <script src="~/client/runtime.js"></script>
+    <script src="~/client/polyfills.js"></script>
+    <script src="~/client/main.js" asp-append-version="true"></script>
+}
+
+@section head {
+    <base href="/app" />
+    <link rel="stylesheet" href="~/client/styles.css">
+}
+
+<app-root> </app-root>
