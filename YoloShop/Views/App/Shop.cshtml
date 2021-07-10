@@ -1,0 +1,21 @@
+@model IEnumerable<Product>
+
+<h1>Welcome to Universe Shop</h1>
+<p>Count : @Model.Count()</p><div></div>
+
+<div class="row">
+    @foreach (var p in Model)
+    {
+        <div class="col-md-3">
+            <div class="card" style="width: 23rem;">
+                @* <img src="..." class="card-img-top" alt="..."> *@
+                <div class="card-body">
+                    <h5 class="card-title">@p.Title</h5>
+                    <p class="card-text">@p.ArtDescription</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

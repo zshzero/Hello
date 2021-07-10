@@ -1,0 +1,38 @@
+@model ContactViewModel
+@{
+    ViewBag.Title = "Earth";
+}
+@section Scripts {
+    <script src=" 	https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+}
+
+<h2>Hi from Earth</h2>
+
+<h3>@ViewBag.Title - Contact Us</h3>
+
+<form method="POST">
+    <div asp-validation-summary="ModelOnly"></div> @*Shows error once form is filled and submmitted*@
+    <br>
+    <label asp-for="FirstName">First Name</label>
+    <input asp-for="FirstName" placeholder="Your name..">
+    <span asp-validation-for="FirstName"></span>
+    <br>
+
+    <br>
+    <label asp-for="LastName">Last Name</label>
+    <input asp-for="LastName" placeholder="Your last name..">
+    <span asp-validation-for="LastName"></span>    
+    <br>
+
+    <br>
+    <label asp-for="Reason">Reason</label>
+    <textarea asp-for="Reason" placeholder="Write something.." rows="4"></textarea>
+    <span asp-validation-for="Reason"></span>
+    <br>
+
+    <br>
+    <input type="submit" value="Submit">
+
+    <div>@ViewBag.UserMessage</div>
+  </form>
