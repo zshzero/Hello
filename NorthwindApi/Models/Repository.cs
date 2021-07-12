@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Northwind.Models;
 using NorthwindApi.Models;
+using System.Threading.Tasks;
+using System.Threading;
+using System;
 
 namespace NorthwindApi
 {
@@ -18,19 +21,36 @@ namespace NorthwindApi
             this.logger = logger;
         }
 
-        public IEnumerable<Employee> GetAllEmployees()
+        public async Task<IEnumerable<Employee>> GetAllEmployees(CancellationToken token)
         {
-            return ctx.employees.FromSqlRaw("SELECT * FROM sp_getallemployees();");
-
-            // procedures can only return a single result row, yet, when created with INOUT parameters
-            // https://stackoverflow.com/questions/58507979/how-to-get-result-set-from-postgresql-stored-procedure/58513796#58513796
-            // https://dba.stackexchange.com/questions/118418/when-to-use-stored-procedure-user-defined-function/118419#118419
+            try {
+                Thread.Sleep(10000);
+                return await (ctx.employees.FromSqlRaw("SELECT * FROM sp_getallemployees();").ToListAsync(token));
+                // procedures can only return a single result row, yet, when created with INOUT parameters
+                // https://stackoverflow.com/questions/58507979/how-to-get-result-set-from-postgresql-stored-procedure/58513796#58513796
+                // https://dba.stackexchange.com/questions/118418/when-to-use-stored-procedure-user-defined-function/118419#118419
+            }
+            catch (OperationCanceledException ex) {
+                // https://stackoverflow.com/questions/13040428/difference-between-operationcanceledexception-and-taskcanceledexception
+                System.Console.WriteLine(ex.Message);
+                return null;
+                // Suppress error log - waiting for ef to resolve the issue
+            }
         }
 
-        public IEnumerable<Employee> GetEmployeeById(int EmployeeId)
+        public async Task<IEnumerable<Employee>> GetEmployeeById(int EmployeeId, CancellationToken token)
         {
-            return ctx.employees.Where(e => e.employee_id.Equals(EmployeeId))
-                                .ToList();
+            try
+            {
+                return await ctx.employees.Where(e => e.employee_id.Equals(EmployeeId))
+                                .ToListAsync(token);
+            }
+            catch (OperationCanceledException ex)
+            {
+                System.Console.WriteLine(ex.Message);
+                return null;
+            }
+            
         }
 
         public IEnumerable<Order> GetOrderById(int orderId)

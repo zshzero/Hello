@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NorthwindApi.Models;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace NorthwindApi.Controllers
 {
@@ -19,11 +21,12 @@ namespace NorthwindApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Employee>> GetAllEmployees()
+        public async Task<ActionResult<IEnumerable<Employee>>> GetAllEmployees(CancellationToken token)
         {
              try
             {
-                return Ok(repository.GetAllEmployees());
+                 var result = await repository.GetAllEmployees(token);
+                 return Ok(result);
             }
             catch (System.Exception ex)
             {
@@ -34,11 +37,12 @@ namespace NorthwindApi.Controllers
         }
 
         [HttpGet("{EmployeeId:int}")] 
-        public ActionResult<IEnumerable<Employee>> GetEmployeeById(int EmployeeId)
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployeeById(int EmployeeId, CancellationToken token)
         {
              try
             {
-                return Ok(repository.GetEmployeeById(EmployeeId));
+                var result = await repository.GetEmployeeById(EmployeeId, token);
+                return Ok(result);
             }
             catch (System.Exception ex)
             {
