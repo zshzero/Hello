@@ -7,6 +7,8 @@ using NorthwindApi.Models;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
+using System.Data;
+using Dapper;
 
 namespace NorthwindApi
 {
@@ -14,11 +16,13 @@ namespace NorthwindApi
     {
         private readonly NorthwindContext ctx;
         private readonly ILogger logger;
+        private readonly IDbConnection Connection;
 
-        public Repository(NorthwindContext ctx, ILogger<Repository> logger)
+        public Repository(NorthwindContext ctx, ILogger<Repository> logger, IDbConnection dapperConnection)
         {
             this.ctx = ctx;
             this.logger = logger;
+            this.Connection = dapperConnection;
         }
 
         public async Task<IEnumerable<Employee>> GetAllEmployees(CancellationToken token)
@@ -53,10 +57,21 @@ namespace NorthwindApi
             
         }
 
-        public IEnumerable<Order> GetOrderById(int orderId)
+        public async Task<IEnumerable<Order>> GetOrderById(int orderId, CancellationToken token)
         {
-             return ctx.orders.Where(o => o.order_id.Equals(orderId))
-                                .ToList();
+            string sql = "SELECT * FROM Orders where order_id = @OrderId";
+            try
+            {
+                return await Connection.QueryAsync<Order>(new CommandDefinition(sql, new { OrderId = orderId }, cancellationToken: token))
+                                    .ConfigureAwait(false);
+                // https://medium.com/bynder-tech/c-why-you-should-use-configureawait-false-in-your-library-code-d7837dce3d7f
+            }
+            catch (OperationCanceledException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+             
         }
 
         public IEnumerable<Order> GetAllOrdersByEmployeeId(int EmployeeId   )

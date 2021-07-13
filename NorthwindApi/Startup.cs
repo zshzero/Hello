@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Northwind.Models;
-
+using Npgsql;
 
 namespace NorthwindApi
 {
@@ -35,6 +36,8 @@ namespace NorthwindApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NorthwindApi", Version = "v1" });
             });
             services.AddDbContext<NorthwindContext>();
+            services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(System.Environment.GetEnvironmentVariable("Northwind_ContextDB")));
+            // https://stackoverflow.com/questions/9218847/how-do-i-handle-database-connections-with-dapper-in-net/47403685#47403685
             services.AddScoped<IRepository,Repository>();
         }
 
