@@ -9,6 +9,8 @@ using System.Threading;
 using System;
 using System.Data;
 using Dapper;
+using Microsoft.Extensions.Caching.Distributed;
+using NorthwindApi.Extensions;
 
 namespace NorthwindApi
 {
@@ -17,12 +19,17 @@ namespace NorthwindApi
         private readonly NorthwindContext ctx;
         private readonly ILogger logger;
         private readonly IDbConnection Connection;
+        private readonly IDistributedCache redisCache;
 
-        public Repository(NorthwindContext ctx, ILogger<Repository> logger, IDbConnection dapperConnection)
+        public Repository(NorthwindContext ctx,
+                          ILogger<Repository> logger,
+                          IDbConnection dapperConnection,
+                          IDistributedCache redisCache)
         {
             this.ctx = ctx;
             this.logger = logger;
             this.Connection = dapperConnection;
+            this.redisCache = redisCache;
         }
 
         public async Task<IEnumerable<Employee>> GetAllEmployees(CancellationToken token)
@@ -74,10 +81,26 @@ namespace NorthwindApi
              
         }
 
-        public IEnumerable<Order> GetAllOrdersByEmployeeId(int EmployeeId   )
+        public async Task<IEnumerable<Order>> GetAllOrdersByEmployeeId(int EmployeeId)
         {
-            return ctx.orders.Where(o => o.employee_id.Equals(EmployeeId))
-                                                .ToList();
+            try
+            {
+                string recordKey = $"{EmployeeId}_{DateTime.Now.ToString("yyyyMMdd_hhmm")}";
+                var result = await redisCache.GetRecordAsync<IEnumerable<Order>>(recordKey);
+
+                if (result is null)
+                {
+                    result = await ctx.orders.Where(o => o.employee_id.Equals(EmployeeId)).ToListAsync();
+                    await redisCache.SetRecordAsync<IEnumerable<Order>>(recordKey, result);
+                }
+
+                return result;
+            }
+            catch (OperationCanceledException ex)
+            {
+               Console.WriteLine(ex.Message);
+                return null;
+            }
         }
 
         public IEnumerable<Order> GetOrdersByEmployeeId(int EmployeeId, int orderId)

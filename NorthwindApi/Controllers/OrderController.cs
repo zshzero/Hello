@@ -22,11 +22,12 @@ namespace Northwind.Controllers
         }
         
         [HttpGet("employee/{EmployeeId:int}")] 
-        public ActionResult<IEnumerable<Order>> GetAllOrdersByEmployeeId(int EmployeeId)
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrdersByEmployeeId(int EmployeeId)
         {
              try
             {
-                return Ok(repository.GetAllOrdersByEmployeeId(EmployeeId));
+                var result = await repository.GetAllOrdersByEmployeeId(EmployeeId);
+                return Ok(result);
             }
             catch (System.Exception ex)
             {

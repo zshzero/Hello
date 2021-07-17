@@ -10,7 +10,7 @@ namespace NorthwindApi
         Task<IEnumerable<Employee>> GetAllEmployees(CancellationToken token);
         Task<IEnumerable<Employee>> GetEmployeeById(int EmployeeId, CancellationToken token);
         Task<IEnumerable<Order>> GetOrderById(int orderId, CancellationToken token);
-        IEnumerable<Order> GetAllOrdersByEmployeeId(int EmployeeId);
+        Task<IEnumerable<Order>> GetAllOrdersByEmployeeId(int EmployeeId);
         IEnumerable<Order> GetOrdersByEmployeeId(int employeeId, int orderId);
     }
 }

@@ -38,6 +38,11 @@ namespace NorthwindApi
             services.AddDbContext<NorthwindContext>();
             services.AddTransient<IDbConnection>((sp) => new NpgsqlConnection(System.Environment.GetEnvironmentVariable("Northwind_ContextDB")));
             // https://stackoverflow.com/questions/9218847/how-do-i-handle-database-connections-with-dapper-in-net/47403685#47403685
+            services.AddStackExchangeRedisCache(options => {
+                options.Configuration = System.Environment.GetEnvironmentVariable("Northwind_RedisDB");
+                options.InstanceName = "NorthwindApi_";
+            });
+            // https://stackoverflow.com/questions/56272957/what-are-the-key-difference-in-using-redis-cache-via-connectionmultiplexer
             services.AddScoped<IRepository,Repository>();
         }
 
