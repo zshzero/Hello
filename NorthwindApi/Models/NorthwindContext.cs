@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using NorthwindApi.Models;
 
-namespace Northwind.Models
+namespace NorthwindApi.Models
 {
     public class NorthwindContext : DbContext
     {
