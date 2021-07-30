@@ -59,16 +59,8 @@ namespace NorthwindApi.Controllers
         [HttpGet("{EmployeeId:int}/order/{OrderId:int}")]
         public ActionResult<IEnumerable<Order>> GetOrdersByEmployeeId(int EmployeeId, int OrderId)
         {
-             try
-            {
-                return Ok(repository.GetOrdersByEmployeeId(EmployeeId, OrderId));
-            }
-            catch (System.Exception ex)
-            {
-                logger.LogError($"Failed: {ex}");
-                return BadRequest($"Failed to get Order by Employee");
-            }
-            
-        }    
+            throw new System.Exception("Middleware up");
+            return Ok(repository.GetOrdersByEmployeeId(EmployeeId, OrderId));
+        }
     }
 }

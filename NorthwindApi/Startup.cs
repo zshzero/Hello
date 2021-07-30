@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NorthwindApi.Extensions;
 using NorthwindApi.Models;
 using Npgsql;
 
@@ -47,7 +48,7 @@ namespace NorthwindApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<ErrorResponse> logger)
         {
             if (env.IsDevelopment())
             {
@@ -55,6 +56,8 @@ namespace NorthwindApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NorthwindApi v1"));
             }
+
+            app.ConfigureExceptionHandler(logger);
 
             app.UseHttpsRedirection();
 
