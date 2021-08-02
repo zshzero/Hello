@@ -12,9 +12,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using NorthwindApi.Services;
 using NorthwindApi.Extensions;
 using NorthwindApi.Models;
 using Npgsql;
+using System.Net.Http.Headers;
 
 namespace NorthwindApi
 {
@@ -45,6 +47,15 @@ namespace NorthwindApi
             });
             // https://stackoverflow.com/questions/56272957/what-are-the-key-difference-in-using-redis-cache-via-connectionmultiplexer
             services.AddScoped<IRepository,Repository>();
+            services.AddTransient<INorthwindWebService, NorthwindWebService>();
+            services.AddHttpClient("NorthwindWebService", client => {
+                client.BaseAddress = new Uri(Configuration.GetValue<String>("NorthwindWebServiceURI"));
+                client.DefaultRequestHeaders
+                        .Accept
+                        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            // https://stackoverflow.com/questions/10679214/how-do-you-set-the-content-type-header-for-an-httpclient-request
+            });
+            // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
