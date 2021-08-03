@@ -47,8 +47,7 @@ namespace NorthwindApi
             });
             // https://stackoverflow.com/questions/56272957/what-are-the-key-difference-in-using-redis-cache-via-connectionmultiplexer
             services.AddScoped<IRepository,Repository>();
-            services.AddTransient<INorthwindWebService, NorthwindWebService>();
-            services.AddHttpClient("NorthwindWebService", client => {
+            services.AddHttpClient<INorthwindWebService, NorthwindWebService>(client => {
                 client.BaseAddress = new Uri(Configuration.GetValue<String>("NorthwindWebServiceURI"));
                 client.DefaultRequestHeaders
                         .Accept

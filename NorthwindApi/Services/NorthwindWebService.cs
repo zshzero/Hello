@@ -8,18 +8,16 @@ namespace NorthwindApi.Services
 {
     class NorthwindWebService : INorthwindWebService
     {
-        public IHttpClientFactory HttpClientFactory { get; }
+        public HttpClient HttpClient { get; }
         
-        public NorthwindWebService(IHttpClientFactory httpClientFactory)
+        public NorthwindWebService(HttpClient httpClient)
         {
-            this.HttpClientFactory = httpClientFactory;
+            this.HttpClient = httpClient;
         }
         
         public async Task<Customers> GetCustomersAsync(CancellationToken token)
-        {
-            var httpclient = HttpClientFactory.CreateClient("NorthwindWebService");
-            
-            var result = await httpclient.GetFromJsonAsync<Customers>("customers.json", token);
+        {            
+            var result = await HttpClient.GetFromJsonAsync<Customers>("customers.json", token);
             return result;
         }
     }
