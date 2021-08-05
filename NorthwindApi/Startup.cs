@@ -17,6 +17,7 @@ using NorthwindApi.Extensions;
 using NorthwindApi.Models;
 using Npgsql;
 using System.Net.Http.Headers;
+using Polly;
 
 namespace NorthwindApi
 {
@@ -53,7 +54,14 @@ namespace NorthwindApi
                         .Accept
                         .Add(new MediaTypeWithQualityHeaderValue("application/json"));
             // https://stackoverflow.com/questions/10679214/how-do-you-set-the-content-type-header-for-an-httpclient-request
-            });
+            }).AddTransientHttpErrorPolicy(policy => policy.WaitAndRetryAsync(
+                    retryCount: 3, 
+                    sleepDurationProvider: retryCount => TimeSpan.FromSeconds(Math.Pow(2, retryCount))))
+              .AddTransientHttpErrorPolicy(policy => policy.CircuitBreakerAsync(
+                    handledEventsAllowedBeforeBreaking: 6,
+                    durationOfBreak: TimeSpan.FromSeconds(30)
+              // https://github.com/App-vNext/Polly/wiki/Polly-and-HttpClientFactory
+            ));
             // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests
         }
 
