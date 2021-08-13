@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NorthwindApi.Models;
 using Serilog;
 
 namespace NorthwindApi
@@ -31,6 +32,7 @@ namespace NorthwindApi
                     .ReadFrom.Configuration(hostingcontext.Configuration)
                     .ReadFrom.Services(services)
                     .Enrich.FromLogContext()
+                    .Enrich.With<RemoveSerilogProperties>()
                     // https://github.com/serilog/serilog-aspnetcore#two-stage-initialization
                 )
                 .ConfigureWebHostDefaults(webBuilder =>

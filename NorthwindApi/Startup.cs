@@ -18,6 +18,7 @@ using NorthwindApi.Models;
 using Npgsql;
 using System.Net.Http.Headers;
 using Polly;
+using Serilog;
 
 namespace NorthwindApi
 {
@@ -74,6 +75,8 @@ namespace NorthwindApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NorthwindApi v1"));
             }
+            app.UseSerilogRequestLogging(); 
+            // https://github.com/serilog/serilog-aspnetcore#request-logging
 
             app.ConfigureExceptionHandler(logger);
 
