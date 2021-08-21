@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+
+    app:
+        image: zshzero/debian:dbsetup
+        ports:
+            - "5000:5000"
+            - "5001:5001"
+            - "5432:5432"
+        volumes:
+            - "~/docker/Debian/:/root/"
+        environment:
+            - Northwind_ContextDB=Server=localhost;Port=5432;Database=northwind;UserId=postgres;Password=postgres;
+            - Northwind_RedisDB=localhost:6379
+        command: bash -c "
+                    cd /root && chmod -R 777 .
+                    && pg_ctlcluster 13 main restart
+                    && tail -F .bashrc
+                  "
+ 
