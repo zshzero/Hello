@@ -1,22 +1,22 @@
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
+import { Route, Routes } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
-import Todo from "./Components/Todo";
+import AllMeetups from "./Pages/AllMeetups"
+import NewMeetup from "./Pages/NewMeetup"
+import Favorites from "./Pages/Favorites"
+import MainNavigation from "./Components/Layout/MainNavigation"
 
-function App() {
+export default () => {
 	return (
-		<Container>
-			<h1>My Todos</h1>
-
-			<Row>
-				<Col><Todo header="Task 1" /></Col>
-				<Col><Todo header="Task 2" /></Col>
-				<Col><Todo header="Task 3" /></Col>
-			</Row>
-
-		</Container>
+		<>
+			<MainNavigation />
+			<Container fluid="md" className="md-center">
+				<Routes>
+					<Route path="/" element={<AllMeetups />} exact></Route>
+					<Route path="/new" element={<NewMeetup />} ></Route>
+					<Route path="/fav" element={<Favorites />} ></Route>
+				</Routes>
+			</Container>
+		</>
 	);
 }
-
-export default App;
